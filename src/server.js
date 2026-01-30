@@ -16,11 +16,14 @@ const corsOptions = {
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:3000",
+    "https://www.ziahomeopethic.online",
+    "https://ziahomeopethic.online",
     process.env.FRONTEND_URL,
     process.env.ADMIN_URL,
   ].filter(Boolean),
   credentials: true,
 };
+app.options("*", cors(corsOptions));
 
 app.use(cors(corsOptions));
 app.use(express.json());
