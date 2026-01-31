@@ -2,22 +2,23 @@
 
 Backend API for the ZIA / Fajjo Homeopathic Clinic project with MongoDB database integration.
 
-## Deploy to Production (Render) — Push & Go
+## Deploy to Production
 
-1. **Create a MongoDB Atlas database** (free at [mongodb.com/atlas](https://www.mongodb.com/atlas)) and copy the connection string.
+### Vercel (recommended – all-in-one)
 
-2. **Connect your GitHub repo to Render:**
-   - Go to [render.com](https://render.com) → New → Web Service
-   - Connect your repo. If your repo has multiple folders, set **Root Directory** to `zia-backend`
-   - Render will use `render.yaml` for build/start commands
+1. **Create a MongoDB Atlas database** (free at [mongodb.com/atlas](https://www.mongodb.com/atlas)) and copy the connection string. In **Network Access**, allow `0.0.0.0/0`.
 
-3. **Set environment variable in Render:**
-   - In your service → Environment → Add variable
-   - `MONGO_URI` = `mongodb+srv://user:pass@cluster.mongodb.net/zia-clinic?retryWrites=true&w=majority`
+2. **Deploy backend on Vercel:**
+   - Go to [vercel.com](https://vercel.com) → Add New → Project
+   - Import your repo, set **Root Directory** to `zia-backend`
+   - **Environment Variables:** Add `MONGO_URI` = your MongoDB connection string
+   - Deploy. Your API will be at `https://your-backend-name.vercel.app`
 
-4. **Deploy** — Render will build and deploy. Your API will be at `https://zia-clinic-backend.onrender.com`
+3. **Deploy frontend & admin:** Create separate Vercel projects for `ZIA-FRONTEND` and `zia-admin`. In each, add `VITE_API_BASE_URL` = your backend URL (e.g. `https://your-backend-name.vercel.app`).
 
-After that, every push to GitHub will auto-deploy.
+### Other options: Koyeb, Render
+
+See the [Express on Vercel](https://vercel.com/docs/frameworks/backend/express) docs for more details.
 
 ## Tech
 

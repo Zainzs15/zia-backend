@@ -1,37 +1,35 @@
 import mongoose from "mongoose";
 
+// Connection caching for Vercel serverless (reuse across invocations)
+const cached = global.mongoose || (global.mongoose = { conn: null, promise: null });
+
 export async function connectDB() {
   if (!process.env.MONGO_URI) {
-    console.error("❌ MONGO_URI is not set. Create a .env file with your MongoDB connection string.");
-    console.error("   Copy .env.example to .env and add: MONGO_URI=mongodb+srv://...");
-    process.exit(1);
+    const msg = "MONGO_URI is not set. Add it in Vercel Environment Variables.";
+    console.error("❌", msg);
+    if (typeof process.exit === "function") {
+      process.exit(1);
+    }
+    throw new Error(msg);
+  }
+
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(process.env.MONGO_URI).then((m) => m);
   }
 
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      // These options are recommended for Mongoose 6+
-      // Remove deprecated options if using older versions
-    });
-    console.log("✅ MongoDB connected successfully");
-    
-    // Handle connection events
-    mongoose.connection.on("error", (err) => {
-      console.error("MongoDB connection error:", err);
-    });
-
-    mongoose.connection.on("disconnected", () => {
-      console.warn("MongoDB disconnected");
-    });
-
-    // Graceful shutdown
-    process.on("SIGINT", async () => {
-      await mongoose.connection.close();
-      console.log("MongoDB connection closed due to app termination");
-      process.exit(0);
-    });
+    cached.conn = await cached.promise;
+    return cached.conn;
   } catch (err) {
+    cached.promise = null;
     console.error("❌ MongoDB connection error:", err);
-    process.exit(1);
+    if (typeof process.exit === "function") {
+      process.exit(1);
+    }
+    throw err;
   }
 }
-

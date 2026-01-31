@@ -1,6 +1,7 @@
 {
   "name": "zia-clinic-backend",
   "version": "1.0.0",
+  "engines": { "node": ">=18" },
   "description": "Backend API for ZIA / Fajjo Homeopathic Clinic (appointments, patients, payments).",
   "type": "module",
   "main": "src/server.js",
