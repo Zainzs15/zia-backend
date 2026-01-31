@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 
 export async function connectDB() {
   if (!process.env.MONGO_URI) {
-    console.warn("MONGO_URI is not set. Skipping DB connection.");
-    return;
+    console.error("❌ MONGO_URI is not set. Create a .env file with your MongoDB connection string.");
+    console.error("   Copy .env.example to .env and add: MONGO_URI=mongodb+srv://...");
+    process.exit(1);
   }
 
   try {

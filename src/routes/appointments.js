@@ -14,7 +14,7 @@ function getDateKey(dateString) {
 }
 
 async function getNextSlotForDate(dateKey) {
-  // Coundt existing appointments for this date
+  // Count existing appointments for this date
   const existingCount = await Appointment.countDocuments({
     preferredDate: dateKey,
   });
